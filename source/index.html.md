@@ -1,5 +1,5 @@
 ---
-title: API Reference
+title: VCC API
 
 language_tabs: # must be one of https://git.io/vQNgJ
   - shell
@@ -17,11 +17,15 @@ includes:
 search: true
 ---
 
-# 港华网上营业厅
+# 简介
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+本章节主要讲述https和ftps两种协议，https用于实时交互接口，例如账户信息查询、圈存机提气及结果上报等接口，sftp用于文件同步类接口，如按日对账接口。[]代表可选参数，{}代表必须参数。
 
-We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
+本章节主要讲述https和ftps两种协议，https用于实时交互接口，例如账户信息查询、圈存机提气及结果上报等接口，sftp用于文件同步类接口，如按日对账接口。[]代表可选参数，{}代表必须参数。
+
+### HTTP Request
+
+`GET https://api.towngasvcc.com/vcc-openapi/{resource}?{query_string}`
 
 This example API documentation page was created with [Slate](https://github.com/tripit/slate). Feel free to edit it and use it as a base for your own API's documentation.
 
