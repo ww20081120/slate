@@ -3,7 +3,11 @@ title: VCC API
 
 language_tabs: # must be one of https://git.io/vQNgJ
   - shell
-  - java
+  - ruby
+  - python
+  - javascript
+
+toc_footers:
 
 includes:
   - errors
