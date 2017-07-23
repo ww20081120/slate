@@ -1,5 +1,5 @@
 ---
-title: 港华网上客户系统通信协议-VCC平台能力开放接口分册
+title: VCC API
 
 language_tabs: # must be one of https://git.io/vQNgJ
   - shell
@@ -17,7 +17,7 @@ includes:
 search: true
 ---
 
-# Introduction
+# 港华网上客户系统通信协议-VCC平台能力开放接口分册
 
 Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
 
