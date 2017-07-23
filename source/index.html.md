@@ -61,11 +61,11 @@ search: true
 
 <table>
 <tr>
-<td rowspan="2">类型</td>
+<td colspan="2">类型</td>
 <td>说明</td>
 </tr>
 <tr>
-<td colspan="2">请求头</td>
+<td rowspan="2">请求头</td>
 <td>普通参数</td>
 <td>普通参数由多个键值队组成，多个参数用&分割，如appId=xxx&deviceId=XXX</td>
 </tr>
