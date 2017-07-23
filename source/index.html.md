@@ -61,10 +61,11 @@ search: true
 
 <table>
 <tr>
-<td>类型</td>
+<td rowspan="2">类型</td>
 <td>说明</td>
 </tr>
 <tr>
+<td colspan="2">请求头</td>
 <td>普通参数</td>
 <td>普通参数由多个键值队组成，多个参数用&分割，如appId=xxx&deviceId=XXX</td>
 </tr>
@@ -74,12 +75,6 @@ search: true
 </td>
 </tr>
 </table>
-
-类型|说明
-----|----------
-普通参数|普通参数由多个键值队组成，多个参数用&分割，如appId=xxx&deviceId=XXX
-签名|签名也为固定key的键值对，key为sign，值为UpperCase(MD5(sort(普通参数)+报文体+接入密码))。其中接入密码，是VCC终端首次接入VCC平台后，由VCC平台分配的一个零时会话密钥，签名算法在计算时，普通参数需要去掉参数间所有的连接符，如“=” 、“&”符号。如果请求头中value为空，key不能参与计算；如果value不为空，则必须参与加密。sort为普通参数在参与签名时需要按照key的字母顺序进行排序。UpperCase为MD5的字符都转换为大写字母。
-
 
 # Authentication
 
