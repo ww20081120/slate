@@ -27,7 +27,11 @@ search: true
 
 `GET https://api.towngasvcc.com/vcc-openapi/{resource}?{query_string}`
 
-This example API documentation page was created with [Slate](https://github.com/tripit/slate). Feel free to edit it and use it as a base for your own API's documentation.
+####说明
+1. resource为操作业务资源名；
+2. query_string由通用参数部分和具体API调用参数部分组成；
+3. query_string中的key/value对都必须经过urlencode处理，而且必须是UTF-8编码；
+4. 对于GET请求，query_string必须放在QUERY参数中传递，即放在“？”后面；
 
 # Authentication
 
