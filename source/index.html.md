@@ -101,7 +101,7 @@ HTTPS协议，请求方式GET，响应数据为JSON格式。
 
 #### 交互流程
 
-
+![image](https://github.com/ww20081120/slate/raw/master/source/images/p1.png)
 
 > To authorize, use this code:
 
