@@ -109,10 +109,28 @@ HTTPS协议，请求方式GET，响应数据为JSON格式。
 --------- | ------- | ------- | -------------- | -------
 seq | string | 32 | 消息序列号，前4位为接口编码1001，5～18位为时间戳，格式为yyyyMMddHHmmss，19～32位为消息流水号，00000000000001～99999999999999，达到最大值后可以循环使用。|Y
 appId | string | 20 | VCC平台分配的应用ID | Y
-sign | string | 32 | 安全加密签名，算法参考[摘要算法](#sgin)，其中基础密钥需要第三方开发商向VCC平台申请，申请邮箱 sun.lei06@towngas.com.cn，ww20081120@139.com
+sign | string | 32 | 安全加密签名，算法参考[摘要算法](#sgin)，其中基础密钥需要第三方开发商向VCC平台申请，申请邮箱 sun.lei06@towngas.com.cn，ww20081120@139.com | Y
 
+#### 返回参数
 
-[点击跳转](#sgin)
+参数名称 | 类型 | 长度 | 描述 | 是否必须
+--------- | ------- | ------- | -------------- | -------
+resultCode | string | | 结果码|Y
+resultMsg | string | 20 | VCC平台分配的应用ID | Y
+expireTime | string | 32 | 安全加密签名，算法参考[摘要算法](#sgin)，其中基础密钥需要第三方开发商向VCC平台申请，申请邮箱 sun.lei06@towngas.com.cn，ww20081120@139.com | Y
+token|
+
+> To authorize, use this code:
+
+```shell
+curl "https://api.towngasvcc.com/vcc-openapi/oauth2/getToken?seq=1001201702152341400000000001&appId=6A5B0E0F1C&sign=2A5C1B556AF1D0C184AE644BD7910296"
+```
+> The above command returns JSON structured like this:
+
+```json
+{"resultCode":"0","expireTime":1486488177,"token":"1Z5M011v4P5joM9VqMr0"}
+```
+
 
 <aside class="success">
 Remember — a happy kitten is an authenticated kitten!
