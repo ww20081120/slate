@@ -52,7 +52,7 @@ search: true
 ### 通信安全性
 本协议通过在报文体之后增加接入密码安全验证并对整个消息体进行摘要处理，以实现VCC圈存机与VCC平台之间交互报文来源的身份验证并保证报文的完整性，从而确保VCC圈存机与VCC平台的通信安全。
 
-#### 消息的摘要算法
+#### <span id="sgin">消息的摘要算法</span>
 请求消息接入安全验证报文包含如下几部分：
 
 <table>
@@ -103,19 +103,22 @@ HTTPS协议，请求方式GET，响应数据为JSON格式。
 
 ![image](https://github.com/ww20081120/slate/raw/master/source/images/p1.png)
 
+#### 请求参数
+
+参数名称 | 类型 | 长度 | 描述 | 是否必须
+--------- | ------- | ------- | -------------- | -------
+seq | string | 32 | 消息序列号，前4位为接口编码1001，5～18位为时间戳，格式为yyyyMMddHHmmss，19～32位为消息流水号，00000000000001～99999999999999，达到最大值后可以循环使用。|Y
+appId | string | 20 | VCC平台分配的应用ID | Y
+sign | string | 32 | 安全加密签名，算法参考[摘要算法](#sgin)，其中基础密钥需要第三方开发商向VCC平台申请，申请邮箱 sun.lei06@towngas.com.cn，ww20081120@139.com
+
+
+[点击跳转](#sgin)
+
+<aside class="success">
+Remember — a happy kitten is an authenticated kitten!
+</aside>
+
 > To authorize, use this code:
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-```
 
 ```shell
 # With shell, you can just pass the correct header with each request
