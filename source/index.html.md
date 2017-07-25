@@ -254,21 +254,21 @@ curl -G "https://api.towngasvcc.com/vcc-openapi/media/get?seq=SEQ&token=TOKEN&&m
 
 ## 3001 地址信息增量同步（企业）
 
-可以通过该接口下载历史地址信息记录。如果下载失败，可以重复下载。
+可以通过该接口下载历史<span id="area">地址信息</span>记录。如果下载失败，可以重复下载。
 <aside class="warning">注意：只能下载一个月内的增量地址信息</aside>
 
 ### 承载协议
 
 HTTPS协议，请求方式 GET。
 
-`/addr/download?seq=SEQ&token=TOKEN&areaCode=AREA_CODE&orgCode=ORG_CODE&timestamp=TIMESTAMP`
+`/addr/download?seq=SEQ&token=TOKEN&areaCode=AREA_CODE&orgCode=ORG_CODE&lastTimestamp=LAST_TIMESTAMP&timestamp=TIMESTAMP`
 
 ### 请求参数
 
 > 请求示例（示例为通过curl命令获取多媒体文件）：
 
 ```shell
-curl -I -G "https://api.towngasvcc.com/vcc-openapi/addr/download?seq=SEQ&token=TOKEN&orgCode=ORG_CODE&timestamp=TIMESTAMP"
+curl -I -G "https://api.towngasvcc.com/vcc-openapi/addr/download?seq=SEQ&token=TOKEN&areaCode=AREA_CODE&orgCode=ORG_CODE&lastTimestamp=LAST_TIMESTAMP&timestamp=TIMESTAMP"
 ```
 
 参数名称 | 类型 | 长度 | 描述 | 是否必须
@@ -276,7 +276,8 @@ curl -I -G "https://api.towngasvcc.com/vcc-openapi/addr/download?seq=SEQ&token=T
 seq | string | 32 | 消息序列号，前4位为接口编码1001，5～18位为时间戳，格式为yyyyMMddHHmmss，19～32位为消息流水号，00000000000001～99999999999999，达到最大值后可以循环使用。|Y
 token | string | 20 | 20位的接入令牌，由[1002会话密钥请求接口](#token)获取| Y
 orgCode | string | 20 | 组织机构编码，参考[附录B](#orgCode) | Y
-timestamp | timestamp | 14 | 时间戳格式 yyyyMMddhhmmss | Y
+lastTimestamp | timestamp | 14 | 上次同步时间戳，yyyyMMddhhmmss,默认为当天凌晨 | N
+timestamp | timestamp | 14 | 时间戳格式 yyyyMMddhhmmss,默认为当前时间 | N
 
 ### 返回参数
 
@@ -288,7 +289,6 @@ timestamp | timestamp | 14 | 时间戳格式 yyyyMMddhhmmss | Y
 地址代码|父地址代码|地址类型|地址名称|地址全称|组织机构编码|状态
 3205053690|5400024559|6|153幢|吴江区松陵镇绿地太湖城西三期153幢|WJ0105|A
 3205053691|5400024564|6|151幢|吴江区松陵镇绿地太湖城西三期153幢|WJ0105|X
-
 ```
 参数名称 | 类型 | 长度 | 描述 | 是否必须
 --------- | ------- | ------- | -------------- | -------
@@ -324,7 +324,8 @@ curl -I -G "https://api.towngasvcc.com/vcc-openapi/suppypoint/download?seq=SEQ&t
 seq | string | 32 | 消息序列号，前4位为接口编码1001，5～18位为时间戳，格式为yyyyMMddHHmmss，19～32位为消息流水号，00000000000001～99999999999999，达到最大值后可以循环使用。|Y
 token | string | 20 | 20位的接入令牌，由[1002会话密钥请求接口](#token)获取| Y
 orgCode | string | 20 | 组织机构编码，参考[附录B](#orgCode) | Y
-timestamp | timestamp | 14 | 时间戳格式 yyyyMMddhhmmss | Y
+lastTimestamp | timestamp | 14 | 上次同步时间戳，yyyyMMddhhmmss,默认为当天凌晨 | N
+timestamp | timestamp | 14 | 时间戳格式 yyyyMMddhhmmss,默认为当前时间 | N
 
 ### 返回参数
 
@@ -336,7 +337,6 @@ timestamp | timestamp | 14 | 时间戳格式 yyyyMMddhhmmss | Y
 供气点编码|供气点类型|气源类型|楼栋编码|地址明细|是否穿层户|机构编码
 3205053690|1|1|796797932423|203室|Y|WJ0105
 3205053691|2|2|709712341234|102室|N|WJ0105
-
 ```
 参数名称 | 类型 | 长度 | 描述 | 是否必须
 --------- | ------- | ------- | -------------- | -------
@@ -349,6 +349,54 @@ timestamp | timestamp | 14 | 时间戳格式 yyyyMMddhhmmss | Y
 组织机构编码 | string | 20 | 组织机构编码，参考[附录B](#orgCode) | Y
 
 ## 3003 气户数据增量同步（企业）
+
+可以通过该接口下载增量的气户信息记录。如果下载失败，可以重复下载。
+<aside class="warning">注意：只能下载一个月内的增量气户数据</aside>
+
+### 承载协议
+
+HTTPS协议，请求方式 GET。
+
+`/subs/download?seq=SEQ&token=TOKEN&areaCode=AREA_CODE&orgCode=ORG_CODE&lastTimestamp=LAST_TIMESTAMP&timestamp=TIMESTAMP`
+
+### 请求参数
+
+> 请求示例（示例为通过curl命令获取多媒体文件）：
+
+```shell
+curl -I -G "https://api.towngasvcc.com/vcc-openapi/subs/download?seq=SEQ&token=TOKEN&areaCode=AREA_CODE&orgCode=ORG_CODE&lastTimestamp=LAST_TIMESTAMP&timestamp=TIMESTAMP"
+```
+
+参数名称 | 类型 | 长度 | 描述 | 是否必须
+--------- | ------- | ------- | -------------- | -------
+seq | string | 32 | 消息序列号，前4位为接口编码1001，5～18位为时间戳，格式为yyyyMMddHHmmss，19～32位为消息流水号，00000000000001～99999999999999，达到最大值后可以循环使用。|Y
+token | string | 20 | 20位的接入令牌，由[1002会话密钥请求接口](#token)获取| Y
+orgCode | string | 20 | 组织机构编码，参考[附录B](#orgCode) | Y
+lastTimestamp | timestamp | 14 | 上次同步时间戳，yyyyMMddhhmmss,默认为当天凌晨 | N
+timestamp | timestamp | 14 | 时间戳格式 yyyyMMddhhmmss,默认为当前时间 | N
+
+### 返回参数
+
+> 正确情况下的返回结果如下：
+
+```shell
+成功时，数据以文本表格的方式返回，第一行为表头，后面各行为对应的字段内容。
+
+气户户号|气户名称|地址编码|地址明细|气户类型|气户状态|联系电话|手机号码|组织机构编码
+1400123456|张三|3205053691|153幢|1|A|10086|13600000001|WJ0105
+1400123457|李四|3205053692|152幢|1|A|10087|13600000002|WJ0105
+```
+参数名称 | 类型 | 长度 | 描述 | 是否必须
+--------- | ------- | ------- | -------------- | -------
+气户户号 | string | 20 | 气户户号 |Y
+气户名称 | string | 60 | 气户名称 | Y
+地址编码 | string | 20 | 地址编码，参考[3001 地址信息增量同步](#area) | Y
+地址明细 | string | 60 | 地址明细 | Y
+气户类型 | char | 1 | 1:民用；2:商用 | Y
+气户状态 | char | 1 | 气户状态，参考[附录D](#subsState) | Y
+联系电话 | string | 20 | 联系电话 | N
+手机号码 | string | 20 | 手机号码 | N
+组织机构编码 | string | 20 | 组织机构编码，参考[附录B](#orgCode) | Y
 
 ## 3004 表具信息增量同步（企业）
 
@@ -466,7 +514,8 @@ S | 街道（乡）
 G | 小区（村）
 B | 楼栋
 
-# D 气表类型
+# D 气户状态
+<span id="subsState"></span>
 
 # Introduction
 
