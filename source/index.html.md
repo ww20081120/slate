@@ -224,7 +224,7 @@ HTTPS协议，请求方式 GET。
 > 请求示例（示例为通过curl命令获取多媒体文件）：
 
 ```shell
-curl -I -G "https://api.towngasvcc.com/vcc-openapi/media/get?seq=SEQ&token=TOKEN&&mediaId=MEDIA_ID"
+curl -I -G "https://api.towngasvcc.com/vcc-openapi/media/get?seq=SEQ&token=TOKEN&mediaId=MEDIA_ID"
 ```
 
 参数名称 | 类型 | 长度 | 描述 | 是否必须
@@ -283,15 +283,22 @@ timestamp | timestamp | 14 | 时间戳格式 yyyyMMddhhmmss | Y
 > 正确情况下的返回结果如下：
 
 ```shell
-HTTP/1.1 200 OK
-Connection: close
-Content-Type: image/jpeg 
-Content-disposition: attachment; filename="ADDR_TIMESTAMP.csv"
-Date: Sun, 06 Jan 2013 10:20:18 GMT
-Cache-Control: no-cache, must-revalidate
-Content-Length: 339721
-curl -G "https://api.towngasvcc.com/vcc-openapi/media/get?seq=SEQ&token=TOKEN&&mediaId=MEDIA_ID"
+成功时，数据以文本表格的方式返回，第一行为表头，后面各行为对应的字段内容。
+
+地址代码|父地址代码|地址类型|地址名称|地址全称|组织机构编码|状态
+3205053690|5400024559|6|153幢|吴江区松陵镇绿地太湖城西三期153幢|WJ0105|A
+3205053691|5400024564|6|151幢|吴江区松陵镇绿地太湖城西三期153幢|WJ0105|X
+
 ```
+参数名称 | 类型 | 长度 | 描述 | 是否必须
+--------- | ------- | ------- | -------------- | -------
+地址代码 | string | 20 | 地址编码。|Y
+父地址代码 | string | 20 | 父地址代码，如果是顶级该字段为空| N
+地址类型 | char | 1 | 地址类型，参考[附录C](#areaCode) | Y
+地址名称 | string | 60 | 地址名称 | Y
+地址全称 | string | 255 | 地址全称 | N
+组织机构编码 | string | 20 | 组织机构编码，参考[附录B](#orgCode) | Y
+状态 | char | 1 | A：可用；X：不可用 | Y
 
 ## 3002 供气信息增量同步（企业）
 
@@ -399,7 +406,18 @@ curl -G "https://api.towngasvcc.com/vcc-openapi/media/get?seq=SEQ&token=TOKEN&&m
 
 <span id="orgCode">X</span>
 
-# C 用户状态
+# C 地址类型
+
+<span id="areaCode"></span>
+地址类型 | 说明
+------ | ------
+P | 省（直辖市）
+C | 市
+D | 区（县）
+T | 镇（大道）
+S | 街道（乡）
+G | 小区（村）
+B | 楼栋
 
 # D 气表类型
 
