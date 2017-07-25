@@ -400,6 +400,55 @@ timestamp | timestamp | 14 | 时间戳格式 yyyyMMddhhmmss,默认为当前时�
 
 ## 3004 表具信息增量同步（企业）
 
+可以通过该接口下载增量的表具信息记录。如果下载失败，可以重复下载。
+<aside class="notice">注意：只能下载一个月内的增量气户数据</aside>
+
+### 承载协议
+
+HTTPS协议，请求方式 GET。
+
+`/meter/download?seq=SEQ&token=TOKEN&areaCode=AREA_CODE&orgCode=ORG_CODE&lastTimestamp=LAST_TIMESTAMP&timestamp=TIMESTAMP`
+
+### 请求参数
+
+> 请求示例（示例为通过curl命令获取多媒体文件）：
+
+```shell
+curl -I -G "https://api.towngasvcc.com/vcc-openapi/meter/download?seq=SEQ&token=TOKEN&areaCode=AREA_CODE&orgCode=ORG_CODE&lastTimestamp=LAST_TIMESTAMP&timestamp=TIMESTAMP"
+```
+
+参数名称 | 类型 | 长度 | 描述 | 是否必须
+--------- | ------- | ------- | -------------- | -------
+seq | string | 32 | 消息序列号，前4位为接口编码1001，5～18位为时间戳，格式为yyyyMMddHHmmss，19～32位为消息流水号，00000000000001～99999999999999，达到最大值后可以循环使用。|Y
+token | string | 20 | 20位的接入令牌，由[1002会话密钥请求接口](#token)获取| Y
+orgCode | string | 20 | 组织机构编码，参考[附录B](#orgCode) | Y
+lastTimestamp | timestamp | 14 | 上次同步时间戳，yyyyMMddhhmmss,默认为当天凌晨 | N
+timestamp | timestamp | 14 | 时间戳格式 yyyyMMddhhmmss,默认为当前时间 | N
+
+### 返回参数
+
+> 正确情况下的返回结果如下：
+
+```shell
+成功时，数据以文本表格的方式返回，第一行为表头，后面各行为对应的字段内容。
+
+表具编号|表具类型|型号|表向|状态|位置|气户编号|管理模式|厂商代码|组织机构编码
+1400123456|01|01|1|A|厨房|3205053691|1|10086|WJ0105
+1400123456|02|03|1|A|厨房|3205053691|1|10086|WJ0105
+```
+参数名称 | 类型 | 长度 | 描述 | 是否必须
+--------- | ------- | ------- | -------------- | -------
+表具编号 | string | 20 | 表具的唯一表示 | Y
+表具类型 | char | 2 | 表具类型，参考[附录E](#resType) | Y
+型号 | char | 2 | 表具型号, 参考[附录F](#resModel) | Y
+表向 | char | 1 | 表向 | Y
+状态 | char | 1 | 状态 A：可用；X：不可用 | Y
+位置 | string | 60 | 表具位置 | N
+气户编号 | string | 20 | 气户唯一标示 | Y
+管理模式 | char | 1 | 管理模式 | N
+厂商代码 | string | 20 | 厂商的唯一标示 | N
+组织机构编码 | string | 20 | 组织机构编码，参考[附录B](#orgCode) | Y
+
 ## 3005 气户信息查询接口
 
 ## 3006 绑定户号查询
@@ -516,6 +565,9 @@ B | 楼栋
 
 # D 气户状态
 <span id="subsState"></span>
+
+# E 表具类型
+<span id="resType"></span>
 
 # Introduction
 
