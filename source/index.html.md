@@ -49,6 +49,20 @@ search: true
 3. query_string中的key/value对都必须经过urlencode处理，而且必须是UTF-8编码；
 4. 对于GET请求，query_string必须放在QUERY参数中传递，即放在“？”后面；
 
+### 错误情况下返回参数
+> The above command returns JSON structured like this:
+
+```json
+{
+    "resultCode": "RESULT CODE",
+    "resultMsg": "RESULT MESSAGE"
+}
+```
+参数名称 | 类型 | 长度 | 描述 | 是否必须
+--------- | ------- | ------- | -------------- | -------
+resultCode | string | | 结果码, 参考[附录A](#errorCode) |Y
+resultMsg | string | | 错误消息 | Y
+
 # 2	安全机制
 
 由于VCC系统支持多种通信方式作为承载手段，而在某些特定环境下，一些通信方式本身就存在着一定安全风险。因此，本协议的安全机制主要是在应用协议层解决圈存机被非法使用和圈存机与VCC平台的数据交互安全问题，同时尽可能的不依赖于具体的通信方式。
@@ -142,7 +156,7 @@ sign | string | 32 | 安全加密签名，算法参考[摘要算法](#sgin)，�
 resultCode | string | | 结果码|Y
 resultMsg | string | 20 | VCC平台分配的应用ID | Y
 expireTime | string | 32 | 安全加密签名，算法参考[摘要算法](#sgin)，其中基础密钥需要第三方开发商向VCC平台申请，申请邮箱 sun.lei06@towngas.com.cn，ww20081120@139.com | Y
-token|
+token| string | 20 | 20位的接入令牌，由字母数字组成 | 
 
 # 4 基础服务
 
@@ -258,7 +272,7 @@ token|
 
 ## 7005 工单状态变化
 
-# A 错误码定义
+# A <span id="errorCode">错误码定义</span>
 
 # B 组织结构编码定义
 
