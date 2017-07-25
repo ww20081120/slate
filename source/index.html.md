@@ -49,7 +49,7 @@ search: true
 3. query_string中的key/value对都必须经过urlencode处理，而且必须是UTF-8编码；
 4. 对于GET请求，query_string必须放在QUERY参数中传递，即放在“？”后面；
 
-### 错误情况下返回参数
+#### 错误情况下返回参数
 > The above command returns JSON structured like this:
 
 ```json
@@ -61,7 +61,7 @@ search: true
 参数名称 | 类型 | 长度 | 描述 | 是否必须
 --------- | ------- | ------- | -------------- | -------
 resultCode | string | | 结果码, 参考[附录A](#errorCode) |Y
-resultMsg | string | | 错误消息 | Y
+resultMsg | string | 256 | 错误消息 | Y
 
 # 2	安全机制
 
@@ -113,7 +113,7 @@ VCC在进行业务操作前，需要请求会话密钥，会话密钥参与后�
 # 3 接入授权
 
 ## 1002服务会话密钥请求（企业）
-对于支持短信的圈存机可以使用该接口设置或修改圈存机的基础密钥，对于不支持短信的圈存机可以直接预置基础密钥。当基础密钥被重置后，会话密钥将会失效。
+<span id="token">对于</span>支持短信的圈存机可以使用该接口设置或修改圈存机的基础密钥，对于不支持短信的圈存机可以直接预置基础密钥。当基础密钥被重置后，会话密钥将会失效。
 
 ### 承载协议
 
@@ -145,7 +145,6 @@ sign | string | 32 | 安全加密签名，算法参考[摘要算法](#sgin)，�
 
 ```json
 {
-    "resultCode": "0",
     "expireTime": 1486488177,
     "token": "1Z5M011v4P5joM9VqMr0"
 }
@@ -153,14 +152,66 @@ sign | string | 32 | 安全加密签名，算法参考[摘要算法](#sgin)，�
 
 参数名称 | 类型 | 长度 | 描述 | 是否必须
 --------- | ------- | ------- | -------------- | -------
-resultCode | string | | 结果码|Y
-resultMsg | string | 20 | VCC平台分配的应用ID | Y
-expireTime | string | 32 | 安全加密签名，算法参考[摘要算法](#sgin)，其中基础密钥需要第三方开发商向VCC平台申请，申请邮箱 sun.lei06@towngas.com.cn，ww20081120@139.com | Y
-token| string | 20 | 20位的接入令牌，由字母数字组成 | 
+expireTime | int | | 会话密钥失效时间，单位为秒，默认7200 | Y
+token| string | 20 | 20位的接入令牌，由字母数字组成 | Y
 
 # 4 基础服务
 
 ## 2001 文件上传
+
+接口中经常有需要用到一些多媒体素材的场景，例如在工单中上传身份证、房产证照片等操作，是通过media_id来进行的。通过本接口，可以上传多媒体文件。
+
+
+
+### 承载协议
+
+HTTPS协议，请求方式 POST/FORM，响应数据为JSON格式。
+
+`/media/upload?access_token=ACCESS_TOKEN&type=TYPE`
+
+### 请求参数
+
+> 调用示例（使用curl命令，用FORM表单方式上传一个多媒体文件）：
+
+```shell
+curl -F media=@test.jpg "https://api.towngasvcc.com/vcc-openapi/media/upload?seq=SEQ&token=TOKEN&type=TYPE"
+```
+
+参数名称 | 类型 | 长度 | 描述 | 是否必须
+--------- | ------- | ------- | -------------- | -------
+seq | string | 32 | 消息序列号，前4位为接口编码1001，5～18位为时间戳，格式为yyyyMMddHHmmss，19～32位为消息流水号，00000000000001～99999999999999，达到最大值后可以循环使用。|Y
+token | string | 20 | 20位的接入令牌，由[1002会话密钥请求接口](#token)获取| Y
+type | string | | 媒体文件类型，分别有图片（image）、语音（voice）、视频（video）和缩略图（thumb）| Y
+media | string | |	是	form-data中媒体文件标识，有filename、filelength、content-type等信息 | Y
+
+<aside class="warning">
+注意点：
+1、临时素材media_id是可复用的。
+2、媒体文件在微信后台保存时间为3天，即3天后media_id失效。
+3、上传临时素材的格式、大小限制与公众平台官网一致。
+    图片（image）: 2M，支持PNG\JPEG\JPG\GIF格式
+    语音（voice）：2M，播放长度不超过60s，支持AMR\MP3格式
+    视频（video）：10MB，支持MP4格式
+    缩略图（thumb）：64KB，支持JPG格式
+</aside>
+
+### 返回参数
+
+> 正确情况下的返回JSON数据包结果如下：
+
+```json
+{
+    "type": "TYPE",
+    "mediaId": "MEDIA_ID",
+    "createTime": 123456789
+}
+```
+
+参数名称 | 类型 | 长度 | 描述 | 是否必须
+--------- | ------- | ------- | -------------- | -------
+type | string | |	媒体文件类型，分别有图片（image）、语音（voice）、视频（video）和缩略图（thumb，主要用于视频与音乐格式的缩略图）| Y
+mediaId | string | 32 | 媒体文件上传后，获取标识 | Y
+createTime | datetime |	媒体文件上传时间戳 格式为yyyyMMddhhmmss | Y
 
 ## 2002 文件下载
 
