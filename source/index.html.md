@@ -1,5 +1,5 @@
 ---
-title: VCC API
+title: API Reference
 
 language_tabs: # must be one of https://git.io/vQNgJ
   - shell
@@ -8,6 +8,8 @@ language_tabs: # must be one of https://git.io/vQNgJ
   - javascript
 
 toc_footers:
+  - <a href='#'>Sign Up for a Developer Key</a>
+  - <a href='https://github.com/tripit/slate'>Documentation Powered by Slate</a>
 
 includes:
   - errors
@@ -15,10 +17,13 @@ includes:
 search: true
 ---
 
-# 范围
+# 1 简介
+
+## 1.1 范围
 
 本标准规定了VCC业务系统与第三方业务系统的通信协议，供港华集团内部和厂商共同使用，用于在业务开展、设备开发方面为集团公司和各地市公司提供技术依据。
-## 规范性引用文件
+
+## 1.2 规范性引用文件
 
 下列文件中的条款通过本标准的引用而成为本标准的条款。凡是注日期的引用文件，其随后所有的修改单(不包括勘误的内容)或修订版均不适用于本标准，然而，鼓励根据本标准达成协议的各方研究是否可使用这些文件的最新版本。凡是不注日期的引用文件，其最新版本适用于本标准。
 
@@ -28,7 +33,7 @@ search: true
 [2]|V1.0.20160420|《TCIS2.0系统与VCC系统接口规范》|港华投资有限公司
 [3]|V1.6|《港华集团网上客户系统与圈存机通信协议》|港华投资有限公司
 
-## 简介
+## 1.3 协议说明
 
 本章节主要讲述https和ftps两种协议，https用于实时交互接口，例如账户信息查询、圈存机提气及结果上报等接口，sftp用于文件同步类接口，如按日对账接口。[]代表可选参数，{}代表必须参数。
 
@@ -44,17 +49,18 @@ search: true
 3. query_string中的key/value对都必须经过urlencode处理，而且必须是UTF-8编码；
 4. 对于GET请求，query_string必须放在QUERY参数中传递，即放在“？”后面；
 
-# 安全机制
+# 2	安全机制
+
 由于VCC系统支持多种通信方式作为承载手段，而在某些特定环境下，一些通信方式本身就存在着一定安全风险。因此，本协议的安全机制主要是在应用协议层解决圈存机被非法使用和圈存机与VCC平台的数据交互安全问题，同时尽可能的不依赖于具体的通信方式。
 
-## 数据交互安全
+## 2.1 数据交互安全
 
 为保证VCC与业务系统之间的数据交互安全，本协议采用接入密码安全验证和报文摘要的方式，以实现在报文交互中对通信双方的身份验证并确保报文的完整性；采用报文内容加密的方式，以保证报文内容的安全性。
 
 ### 通信安全性
 本协议通过在报文体之后增加接入密码安全验证并对整个消息体进行摘要处理，以实现VCC圈存机与VCC平台之间交互报文来源的身份验证并保证报文的完整性，从而确保VCC圈存机与VCC平台的通信安全。
 
-#### <span id="sgin">消息的摘要算法</span>
+#### 消息的摘要算法
 请求消息接入安全验证报文包含如下几部分：
 
 <table>
@@ -90,35 +96,22 @@ VCC圈存机在使用前需要预置基础密钥，基础密钥是由字母和�
 #### 会话密钥的分发与变更
 VCC在进行业务操作前，需要请求会话密钥，会话密钥参与后续业务交互的消息验证。会话密钥请求时会返回一个会话密钥的有效期，在有效期超时前，需要重新请求会话密钥，进行更新。
 
-# 接入授权
-# 1002服务会话密钥请求（企业）
+# 3 接入授权
+
+## 1002服务会话密钥请求（企业）
 对于支持短信的圈存机可以使用该接口设置或修改圈存机的基础密钥，对于不支持短信的圈存机可以直接预置基础密钥。当基础密钥被重置后，会话密钥将会失效。
 
-#### 承载协议
+### 承载协议
+
 HTTPS协议，请求方式GET，响应数据为JSON格式。
 
 `GET /oauth2/getToken?seq=xxxxxxxxxxxxx&appId=xxxx&sign=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
 
-#### 交互流程
+### 交互流程
 
 ![image](https://github.com/ww20081120/slate/raw/master/source/images/p1.png)
 
-#### 请求参数
-
-参数名称 | 类型 | 长度 | 描述 | 是否必须
---------- | ------- | ------- | -------------- | -------
-seq | string | 32 | 消息序列号，前4位为接口编码1001，5～18位为时间戳，格式为yyyyMMddHHmmss，19～32位为消息流水号，00000000000001～99999999999999，达到最大值后可以循环使用。|Y
-appId | string | 20 | VCC平台分配的应用ID | Y
-sign | string | 32 | 安全加密签名，算法参考[摘要算法](#sgin)，其中基础密钥需要第三方开发商向VCC平台申请，申请邮箱 sun.lei06@towngas.com.cn，ww20081120@139.com | Y
-
-#### 返回参数
-
-参数名称 | 类型 | 长度 | 描述 | 是否必须
---------- | ------- | ------- | -------------- | -------
-resultCode | string | | 结果码|Y
-resultMsg | string | 20 | VCC平台分配的应用ID | Y
-expireTime | string | 32 | 安全加密签名，算法参考[摘要算法](#sgin)，其中基础密钥需要第三方开发商向VCC平台申请，申请邮箱 sun.lei06@towngas.com.cn，ww20081120@139.com | Y
-token|
+### 请求参数
 
 > To authorize, use this code:
 
@@ -131,12 +124,46 @@ curl "https://api.towngasvcc.com/vcc-openapi/oauth2/getToken?seq=100120170215234
 {"resultCode":"0","expireTime":1486488177,"token":"1Z5M011v4P5joM9VqMr0"}
 ```
 
+参数名称 | 类型 | 长度 | 描述 | 是否必须
+--------- | ------- | ------- | -------------- | -------
+seq | string | 32 | 消息序列号，前4位为接口编码1001，5～18位为时间戳，格式为yyyyMMddHHmmss，19～32位为消息流水号，00000000000001～99999999999999，达到最大值后可以循环使用。|Y
+appId | string | 20 | VCC平台分配的应用ID | Y
+sign | string | 32 | 安全加密签名，算法参考[摘要算法](#sgin)，其中基础密钥需要第三方开发商向VCC平台申请，申请邮箱 sun.lei06@towngas.com.cn，ww20081120@139.com | Y
 
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
+### 返回参数
+
+参数名称 | 类型 | 长度 | 描述 | 是否必须
+--------- | ------- | ------- | -------------- | -------
+resultCode | string | | 结果码|Y
+resultMsg | string | 20 | VCC平台分配的应用ID | Y
+expireTime | string | 32 | 安全加密签名，算法参考[摘要算法](#sgin)，其中基础密钥需要第三方开发商向VCC平台申请，申请邮箱 sun.lei06@towngas.com.cn，ww20081120@139.com | Y
+token|
+
+
+
+# Introduction
+
+Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+
+We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
+
+This example API documentation page was created with [Slate](https://github.com/tripit/slate). Feel free to edit it and use it as a base for your own API's documentation.
+
+# Authentication
 
 > To authorize, use this code:
+
+```ruby
+require 'kittn'
+
+api = Kittn::APIClient.authorize!('meowmeowmeow')
+```
+
+```python
+import kittn
+
+api = kittn.authorize('meowmeowmeow')
+```
 
 ```shell
 # With shell, you can just pass the correct header with each request
@@ -333,4 +360,3 @@ This endpoint retrieves a specific kitten.
 Parameter | Description
 --------- | -----------
 ID | The ID of the kitten to delete
-
