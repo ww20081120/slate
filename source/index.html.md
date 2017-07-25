@@ -130,7 +130,7 @@ HTTPS协议，请求方式GET，响应数据为JSON格式。
 > To authorize, use this code:
 
 ```shell
-curl "https://api.towngasvcc.com/vcc-openapi/oauth2/getToken?seq=1001201702152341400000000001&appId=6A5B0E0F1C&sign=2A5C1B556AF1D0C184AE644BD7910296"
+curl "https://api.towngasvcc.com/vcc-openapi/oauth2/getToken?seq=SEQ&appId=APP_ID&sign=SIGN"
 ```
 
 参数名称 | 类型 | 长度 | 描述 | 是否必须
@@ -161,13 +161,11 @@ token| string | 20 | 20位的接入令牌，由字母数字组成 | Y
 
 接口中经常有需要用到一些多媒体素材的场景，例如在工单中上传身份证、房产证照片等操作，是通过mediaId来进行的。通过本接口，可以上传多媒体文件。
 
-
-
 ### 承载协议
 
 HTTPS协议，请求方式 POST/FORM，响应数据为JSON格式。
 
-`/media/upload?access_token=ACCESS_TOKEN&type=TYPE`
+`/media/upload?seq=SEQ&token=TOKEN&type=TYPE`
 
 ### 请求参数
 
@@ -181,7 +179,7 @@ curl -F media=@test.jpg "https://api.towngasvcc.com/vcc-openapi/media/upload?seq
 --------- | ------- | ------- | -------------- | -------
 seq | string | 32 | 消息序列号，前4位为接口编码1001，5～18位为时间戳，格式为yyyyMMddHHmmss，19～32位为消息流水号，00000000000001～99999999999999，达到最大值后可以循环使用。|Y
 token | string | 20 | 20位的接入令牌，由[1002会话密钥请求接口](#token)获取| Y
-type | string | | 媒体文件类型，分别有图片（image）、语音（voice）、视频（video）和缩略图（thumb）| Y
+type | string | | 媒体文件类型，分别有图片（image）、语音（voice）和缩略图（thumb）| Y
 media | string | |	是	form-data中媒体文件标识，有filename、filelength、content-type等信息 | Y
 
 <aside class="warning">
@@ -190,7 +188,6 @@ media | string | |	是	form-data中媒体文件标识，有filename、filelength
 2、上传临时素材的格式、大小限制与公众平台官网一致。<br/>
     图片（image）: 2M，支持PNG\JPEG\JPG\GIF格式<br/>
     语音（voice）：2M，播放长度不超过60s，支持AMR\MP3格式<br/>
-    视频（video）：10MB，支持MP4格式<br/>
     缩略图（thumb）：64KB，支持JPG格式<br/>
 </aside>
 
@@ -214,15 +211,49 @@ createTime | datetime |	媒体文件上传时间戳 格式为yyyyMMddhhmmss | Y
 
 ## 2002 文件下载
 
-## 2003 事件注册（企业)
+可以使用本接口获取素材（即下载多媒体文件）。
 
-## 2004 事件取消（企业）
+### 承载协议
+
+HTTPS协议，请求方式 GET。
+
+`/media/get?seq=SEQ&token=TOKEN&&mediaId=MEDIA_ID`
+
+### 请求参数
+
+> 请求示例（示例为通过curl命令获取多媒体文件）：
+
+```shell
+curl -I -G "https://api.towngasvcc.com/vcc-openapi/media/get?seq=SEQ&token=TOKEN&&mediaId=MEDIA_ID"
+```
+
+参数名称 | 类型 | 长度 | 描述 | 是否必须
+--------- | ------- | ------- | -------------- | -------
+seq | string | 32 | 消息序列号，前4位为接口编码1001，5～18位为时间戳，格式为yyyyMMddHHmmss，19～32位为消息流水号，00000000000001～99999999999999，达到最大值后可以循环使用。|Y
+token | string | 20 | 20位的接入令牌，由[1002会话密钥请求接口](#token)获取| Y
+media | string | |	是	form-data中媒体文件标识，有filename、filelength、content-type等信息 | Y
+
+### 返回参数
+
+> 正确情况下的返回结果如下：
+
+```shell
+HTTP/1.1 200 OK
+Connection: close
+Content-Type: image/jpeg 
+Content-disposition: attachment; filename="MEDIA_ID.jpg"
+Date: Sun, 06 Jan 2013 10:20:18 GMT
+Cache-Control: no-cache, must-revalidate
+Content-Length: 339721
+curl -G "https://api.towngasvcc.com/vcc-openapi/media/get?seq=SEQ&token=TOKEN&&mediaId=MEDIA_ID"
+```
 
 # 5 燃气数据查询
 
 提供燃气相关用户、余额、账单、业务办理记录等信息查询
 
 ## 3001 地址信息增量同步（企业）
+
 
 ## 3002 供气信息增量同步（企业）
 
