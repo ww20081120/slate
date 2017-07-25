@@ -254,6 +254,44 @@ curl -G "https://api.towngasvcc.com/vcc-openapi/media/get?seq=SEQ&token=TOKEN&&m
 
 ## 3001 地址信息增量同步（企业）
 
+可以通过该接口下载历史地址信息记录。如果下载失败，可以重复下载。
+<aside class="warning">注意：只能下载一个月内的增量地址信息</aside>
+
+### 承载协议
+
+HTTPS协议，请求方式 GET。
+
+`/addr/download?seq=SEQ&token=TOKEN&areaCode=AREA_CODE&orgCode=ORG_CODE&timestamp=TIMESTAMP`
+
+### 请求参数
+
+> 请求示例（示例为通过curl命令获取多媒体文件）：
+
+```shell
+curl -I -G "https://api.towngasvcc.com/vcc-openapi/addr/download?seq=SEQ&token=TOKEN&orgCode=ORG_CODE&timestamp=TIMESTAMP"
+```
+
+参数名称 | 类型 | 长度 | 描述 | 是否必须
+--------- | ------- | ------- | -------------- | -------
+seq | string | 32 | 消息序列号，前4位为接口编码1001，5～18位为时间戳，格式为yyyyMMddHHmmss，19～32位为消息流水号，00000000000001～99999999999999，达到最大值后可以循环使用。|Y
+token | string | 20 | 20位的接入令牌，由[1002会话密钥请求接口](#token)获取| Y
+orgCode | string | 20 | 组织机构编码，参考[附录B](#orgCode) | Y
+timestamp | timestamp | 14 | 时间戳格式 yyyyMMddhhmmss | Y
+
+### 返回参数
+
+> 正确情况下的返回结果如下：
+
+```shell
+HTTP/1.1 200 OK
+Connection: close
+Content-Type: image/jpeg 
+Content-disposition: attachment; filename="ADDR_TIMESTAMP.csv"
+Date: Sun, 06 Jan 2013 10:20:18 GMT
+Cache-Control: no-cache, must-revalidate
+Content-Length: 339721
+curl -G "https://api.towngasvcc.com/vcc-openapi/media/get?seq=SEQ&token=TOKEN&&mediaId=MEDIA_ID"
+```
 
 ## 3002 供气信息增量同步（企业）
 
@@ -358,6 +396,8 @@ curl -G "https://api.towngasvcc.com/vcc-openapi/media/get?seq=SEQ&token=TOKEN&&m
 <span id="errorCode">x</span>
 
 # B 组织结构编码定义
+
+<span id="orgCode">X</span>
 
 # C 用户状态
 
