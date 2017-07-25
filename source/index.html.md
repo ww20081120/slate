@@ -272,7 +272,9 @@ token| string | 20 | 20位的接入令牌，由字母数字组成 |
 
 ## 7005 工单状态变化
 
-# A <span id="errorCode">错误码定义</span>
+# A 错误码定义
+
+<span id="errorCode">x</span>
 
 # B 组织结构编码定义
 
