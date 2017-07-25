@@ -409,6 +409,7 @@ timestamp | timestamp | 14 | 时间戳格式 yyyyMMddhhmmss | Y
 # C 地址类型
 
 <span id="areaCode"></span>
+
 地址类型 | 说明
 ------ | ------
 P | 省（直辖市）
