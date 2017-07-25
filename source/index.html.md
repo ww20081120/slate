@@ -75,7 +75,7 @@ resultMsg | string | 256 | 错误消息 | Y
 本协议通过在报文体之后增加接入密码安全验证并对整个消息体进行摘要处理，以实现VCC圈存机与VCC平台之间交互报文来源的身份验证并保证报文的完整性，从而确保VCC圈存机与VCC平台的通信安全。
 
 #### 消息的摘要算法
-请求消息接入安全验证报文包含如下几部分：
+<span id="sign"></span>请求消息接入安全验证报文包含如下几部分：
 
 <table>
 <tr>
@@ -255,7 +255,7 @@ curl -G "https://api.towngasvcc.com/vcc-openapi/media/get?seq=SEQ&token=TOKEN&&m
 ## 3001 地址信息增量同步（企业）
 
 可以通过该接口下载历史<span id="area">地址信息</span>记录。如果下载失败，可以重复下载。
-<aside class="warning">注意：只能下载一个月内的增量地址信息</aside>
+<aside class="notice">注意：只能下载一个月内的增量地址信息</aside>
 
 ### 承载协议
 
@@ -303,7 +303,7 @@ timestamp | timestamp | 14 | 时间戳格式 yyyyMMddhhmmss,默认为当前时�
 ## 3002 供气信息增量同步（企业）
 
 可以通过该接口下载历史供气信息记录。如果下载失败，可以重复下载。
-<aside class="warning">注意：只能下载一个月内的增量供气信息</aside>
+<aside class="notice">注意：只能下载一个月内的增量供气信息</aside>
 
 ### 承载协议
 
@@ -351,7 +351,7 @@ timestamp | timestamp | 14 | 时间戳格式 yyyyMMddhhmmss,默认为当前时�
 ## 3003 气户数据增量同步（企业）
 
 可以通过该接口下载增量的气户信息记录。如果下载失败，可以重复下载。
-<aside class="warning">注意：只能下载一个月内的增量气户数据</aside>
+<aside class="notice">注意：只能下载一个月内的增量气户数据</aside>
 
 ### 承载协议
 
