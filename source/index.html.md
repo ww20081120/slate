@@ -302,6 +302,52 @@ timestamp | timestamp | 14 | 时间戳格式 yyyyMMddhhmmss | Y
 
 ## 3002 供气信息增量同步（企业）
 
+可以通过该接口下载历史供气信息记录。如果下载失败，可以重复下载。
+<aside class="warning">注意：只能下载一个月内的增量供气信息</aside>
+
+### 承载协议
+
+HTTPS协议，请求方式 GET。
+
+`/suppypoint/download?seq=SEQ&token=TOKEN&areaCode=AREA_CODE&orgCode=ORG_CODE&timestamp=TIMESTAMP`
+
+### 请求参数
+
+> 请求示例（示例为通过curl命令获取多媒体文件）：
+
+```shell
+curl -I -G "https://api.towngasvcc.com/vcc-openapi/suppypoint/download?seq=SEQ&token=TOKEN&orgCode=ORG_CODE&timestamp=TIMESTAMP"
+```
+
+参数名称 | 类型 | 长度 | 描述 | 是否必须
+--------- | ------- | ------- | -------------- | -------
+seq | string | 32 | 消息序列号，前4位为接口编码1001，5～18位为时间戳，格式为yyyyMMddHHmmss，19～32位为消息流水号，00000000000001～99999999999999，达到最大值后可以循环使用。|Y
+token | string | 20 | 20位的接入令牌，由[1002会话密钥请求接口](#token)获取| Y
+orgCode | string | 20 | 组织机构编码，参考[附录B](#orgCode) | Y
+timestamp | timestamp | 14 | 时间戳格式 yyyyMMddhhmmss | Y
+
+### 返回参数
+
+> 正确情况下的返回结果如下：
+
+```shell
+成功时，数据以文本表格的方式返回，第一行为表头，后面各行为对应的字段内容。
+
+供气点编码|供气点类型|气源类型|楼栋编码|地址明细|是否穿层户|机构编码
+3205053690|1|1|796797932423|203室|Y|WJ0105
+3205053691|2|2|709712341234|102室|N|WJ0105
+
+```
+参数名称 | 类型 | 长度 | 描述 | 是否必须
+--------- | ------- | ------- | -------------- | -------
+供气点编码 | string | 20 | 供气点编码 |Y
+供气点类型 | char | 1 | 1:民用；2:商用 | Y
+气源类型 | char | 1 | 1	管道天然气；2	管道液化气 | Y
+楼栋编码 | string | 20 | 楼栋编码 | Y
+地址明细 | string | 60 | 地址明细 | N
+是否穿层户 | char | 1 | Y：是；N：否 | Y
+组织机构编码 | string | 20 | 组织机构编码，参考[附录B](#orgCode) | Y
+
 ## 3003 气户数据增量同步（企业）
 
 ## 3004 表具信息增量同步（企业）
