@@ -451,6 +451,56 @@ timestamp | timestamp | 14 | 时间戳格式 yyyyMMddhhmmss,默认为当前时�
 
 ## 3005 气户信息查询接口
 
+可以根据户号查询气户信息。
+
+### 承载协议
+
+HTTPS协议，请求方式GET，响应数据为JSON格式。
+
+`/user/getSubsByCode?seq=SEQ&token=TOKEN&subsCode=SUBS_CODE&orgCode=ORG_CODE`
+
+### 请求参数
+
+> 调用示例（使用curl命令，用FORM表单方式上传一个多媒体文件）：
+
+```shell
+curl "https://api.towngasvcc.com/vcc-openapi/subs/getSubsByCode?seq=SEQ&token=TOKEN&subsCode=SUBS_CODE&orgCode=ORG_CODE"
+```
+
+参数名称 | 类型 | 长度 | 描述 | 是否必须
+--------- | ------- | ------- | -------------- | -------
+seq | string | 32 | 消息序列号，前4位为接口编码1001，5～18位为时间戳，格式为yyyyMMddHHmmss，19～32位为消息流水号，00000000000001～99999999999999，达到最大值后可以循环使用。|Y
+token | string | 20 | 20位的接入令牌，由[1002会话密钥请求接口](#token)获取| Y
+type | string | | 媒体文件类型，分别有图片（image）、语音（voice）和缩略图（thumb）| Y
+media | string | |	是	form-data中媒体文件标识，有filename、filelength、content-type等信息 | Y
+
+<aside class="warning">
+注意点：<br/>
+1、临时素材media_id是可复用的。<br/>
+2、上传临时素材的格式、大小限制与公众平台官网一致。<br/>
+    图片（image）: 2M，支持PNG\JPEG\JPG\GIF格式<br/>
+    语音（voice）：2M，播放长度不超过60s，支持AMR\MP3格式<br/>
+    缩略图（thumb）：64KB，支持JPG格式<br/>
+</aside>
+
+### 返回参数
+
+> 正确情况下的返回JSON数据包结果如下：
+
+```json
+{
+    "type": "TYPE",
+    "mediaId": "MEDIA_ID",
+    "createTime": 123456789
+}
+```
+
+参数名称 | 类型 | 长度 | 描述 | 是否必须
+--------- | ------- | ------- | -------------- | -------
+type | string | |	媒体文件类型，分别有图片（image）、语音（voice）、视频（video）和缩略图（thumb，主要用于视频与音乐格式的缩略图）| Y
+mediaId | string | 32 | 媒体文件上传后，获取标识 | Y
+createTime | datetime |	媒体文件上传时间戳 格式为yyyyMMddhhmmss | Y
+
 ## 3006 绑定户号查询
 
 ## 3007 根据地址查询气户信息
