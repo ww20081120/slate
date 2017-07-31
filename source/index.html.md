@@ -207,7 +207,7 @@ media | string | |	是	form-data中媒体文件标识，有filename、filelength
 --------- | ------- | ------- | -------------- | -------
 type | string | |	媒体文件类型，分别有图片（image）、语音（voice）、视频（video）和缩略图（thumb，主要用于视频与音乐格式的缩略图）| Y
 mediaId | string | 32 | 媒体文件上传后，获取标识 | Y
-createTime | datetime |	媒体文件上传时间戳 格式为yyyyMMddhhmmss | Y
+createTime | timestamp |	媒体文件上传时间戳 格式为yyyyMMddhhmmss | Y
 
 ## 2002 文件下载
 
@@ -504,7 +504,59 @@ orgCode | string | 20 | 组织机构编码，参考[附录B](#orgCode) | Y
 
 ## 3006 绑定户号查询
 
-## 3007 根据地址查询气户信息
+可以根据会员信息查询绑定户号信息。
+
+### 承载协议
+
+HTTPS协议，请求方式GET，响应数据为JSON格式。
+
+`/user/querySubsByUserCode?seq=SEQ&token=TOKEN&userCode=USER_CODE&userType=USER_TYPE`
+
+### 请求参数
+
+> 调用示例（使用curl命令，用FORM表单方式上传一个多媒体文件）：
+
+```shell
+curl "https://api.towngasvcc.com/vcc-openapi/user/querySubsByUserCode?seq=SEQ&token=TOKEN&userCode=USER_CODE&userType=USER_TYPE"
+```
+
+参数名称 | 类型 | 长度 | 描述 | 是否必须
+--------- | ------- | ------- | -------------- | -------
+seq | string | 32 | 消息序列号，前4位为接口编码1001，5～18位为时间戳，格式为yyyyMMddHHmmss，19～32位为消息流水号，00000000000001～99999999999999，达到最大值后可以循环使用。|Y
+token | string | 20 | 20位的接入令牌，由[1002会话密钥请求接口](#token)获取| Y
+userCode | string | 32 | 会员的唯一标识，参考《会员对外开放接口》中会员信息查询接口 | Y
+userType | string | 10 | 固定值为MEMBER | Y
+
+### 返回参数
+
+> 正确情况下的返回JSON数据包结果如下：
+
+```json
+[
+    {
+        "subsCode": "140008830",
+        "nickName": "自家",
+        "orgCode": "SU0105",
+        "createTime": "2017-04-25 18:32:18"
+    },
+    {
+        "subsCode": "140008840",
+        "nickName": "自家",
+        "orgCode": "SU0105",
+        "createTime": "2017-04-29 18:32:18"
+    }
+]
+```
+
+参数名称 | 类型 | 长度 | 描述 | 是否必须
+--------- | ------- | ------- | -------------- | -------
+subsCode | string | 20 | 气户户号 |Y
+nickName | string | 32 | 别名 | N
+orgCode | string | 20 | 组织机构编码，参考[附录B](#orgCode) | Y
+createTime | datetime |	媒体文件上传时间 格式为yyyy-MM-dd hh:mm:ss | Y
+
+## 3007 查询气户信息
+
 
 ## 3008 联系人信息查询
 
