@@ -137,7 +137,7 @@ curl "https://api.towngasvcc.com/vcc-openapi/oauth2/getToken?seq=SEQ&appId=APP_I
 --------- | ------- | ------- | -------------- | -------
 seq | string | 32 | 消息序列号，前4位为接口编码1001，5～18位为时间戳，格式为yyyyMMddHHmmss，19～32位为消息流水号，00000000000001～99999999999999，达到最大值后可以循环使用。|Y
 appId | string | 20 | VCC平台分配的应用ID | Y
-sign | string | 32 | 安全加密签名，算法参考[摘要算法](#sgin)，其中基础密钥需要第三方开发商向VCC平台申请，申请邮箱 sun.lei06@towngas.com.cn，ww20081120@139.com | Y
+sign | string | 32 | 安全加密签名，算法参考[摘要算法](#sign)，其中基础密钥需要第三方开发商发送邮件向VCC平台申请，测试环境接口权限申请方式：主送邮箱 sun.lei06@towngas.com.cn、港华方项目负责人邮箱，抄送ww20081120@139.com，并写明申请原因、申请公司名、申请哪些JV公司数据的访问权限、申请哪些接口的使用权限 | Y
 
 ### 返回参数
 
