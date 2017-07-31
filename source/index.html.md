@@ -457,7 +457,7 @@ timestamp | timestamp | 14 | 时间戳格式 yyyyMMddhhmmss,默认为当前时�
 
 HTTPS协议，请求方式GET，响应数据为JSON格式。
 
-`/user/getSubsByCode?seq=SEQ&token=TOKEN&subsCode=SUBS_CODE&orgCode=ORG_CODE`
+`/subs/getSubsByCode?seq=SEQ&token=TOKEN&subsCode=SUBS_CODE&orgCode=ORG_CODE`
 
 ### 请求参数
 
@@ -482,10 +482,12 @@ orgCode | string | 20 | 组织机构编码，参考[附录B](#orgCode) | Y
 {
     "subsCode": "123456",
     "name": "张**",
-    "resType": "A",
+    "addrCode": "1234567",
     "displayAddr": "木岭小区******",
     "subsType": "1",
     "state": "A",
+    "tel": "05121234567",
+    "mobile": "12345678901",
     "orgCode": "SU0105"
 }
 ```
@@ -555,8 +557,95 @@ nickName | string | 32 | 别名 | N
 orgCode | string | 20 | 组织机构编码，参考[附录B](#orgCode) | Y
 createTime | datetime |	媒体文件上传时间 格式为yyyy-MM-dd hh:mm:ss | Y
 
-## 3007 查询气户信息
+## 3007 查询批量气户信息
 
+通过接口实时查询，搜索条件为客户编号，姓名，地址，联系电话，移动电话，其中姓名，地址为模糊查询
+
+### 承载协议
+
+HTTPS协议，请求方式GET，响应数据为JSON格式。
+
+`/subs/querySubs?seq=SEQ&token=TOKEN&subsCode=SUBS_CODE&name=NAME&fullAddr=FULL_ADDR&tel=TEL&mobile=MOBILE&orgCode=ORG_CODE&pageIndex=PAGE_INDEX&pageSize=PAGE_SIZE`
+
+### 请求参数
+
+> 调用示例（使用curl命令，用FORM表单方式上传一个多媒体文件）：
+
+```shell
+curl "https://api.towngasvcc.com/vcc-openapi/subs/querySubs?seq=SEQ&token=TOKEN&subsCode=SUBS_CODE&name=NAME&addrCode=ADDR_CODE&fullAddr=FULL_ADDR&tel=TEL&mobile=MOBILE&orgCode=ORG_CODE&pageIndex=PAGE_INDEX&pageSize=PAGE_SIZE"
+```
+
+参数名称 | 类型 | 长度 | 描述 | 是否必须
+--------- | ------- | ------- | -------------- | -------
+seq | string | 32 | 消息序列号，前4位为接口编码1001，5～18位为时间戳，格式为yyyyMMddHHmmss，19～32位为消息流水号，00000000000001～99999999999999，达到最大值后可以循环使用。|Y
+token | string | 20 | 20位的接入令牌，由[1002会话密钥请求接口](#token)获取| Y
+subsCode | string | 20 | 气户唯一标示 | N
+name | string | 60 | 气户名称，支持模糊查询 | N
+addrCode | string | 20 | 地址编码，参考[3001 地址信息增量同步](#area) | N
+fullAddr | string | 128 | 地址全路径 省、市、区、大道、街道、小区、楼栋、门口号 | N
+tel | string | 20 | 联系电话 | N
+phone | string | 20 | 手机号码 | N
+orgCode | string | 20 | 组织机构编码，参考[附录B](#orgCode) | Y
+pageIndex | int | | 页码 | Y
+pageSize | int | 3 | 分页的大小，最大为100 | Y
+
+### 返回参数
+
+> 正确情况下的返回JSON数据包结果如下：
+
+```json
+{
+    "pageIndex": 1,
+    "pageSize": 10,
+    "total": 12224,
+    "datas": [
+        {
+            "subsCode": "123456",
+            "name": "张**",
+            "addrCode": "1234567",
+            "displayAddr": "木岭小区******",
+            "subsType": "1",
+            "state": "A",
+            "tel": "05121234567",
+            "mobile": "12345678901",
+            "orgCode": "SU0105"
+        },
+        {
+            "subsCode": "123456",
+            "name": "张**",
+            "addrCode": "1234567",
+            "displayAddr": "木岭小区******",
+            "subsType": "1",
+            "state": "A",
+            "tel": "05121234567",
+            "mobile": "12345678901",
+            "orgCode": "SU0105"
+        }
+    ]
+}
+```
+#### 返回参数定义
+
+参数名称 | 类型 | 长度 | 描述 | 是否必须
+--------- | ------- | ------- | -------------- | -------
+pageIndex | int | | 页码 | Y
+pageSize | int | 3 | 分页的大小，最大为100 | Y
+total | int | | 总条数 | Y
+datas | array | | 数组格式的数据, 参考 datas 定义 | Y
+
+#### datas 定义
+
+参数名称 | 类型 | 长度 | 描述 | 是否必须
+--------- | ------- | ------- | -------------- | -------
+subsCode | string | 20 | 气户户号 |Y
+name | string | 60 | 气户名称 | Y
+addrCode | string | 20 | 地址编码，参考[3001 地址信息增量同步](#area) | Y
+addrDetail | string | 60 | 地址明细 | Y
+subsType | char | 1 | 1:民用；2:商用 | Y
+state | char | 1 | 气户状态，参考[附录D](#subsState) | Y
+tel | string | 20 | 联系电话 | N
+phone | string | 20 | 手机号码 | N
+orgCode | string | 20 | 组织机构编码，参考[附录B](#orgCode) | Y
 
 ## 3008 联系人信息查询
 
