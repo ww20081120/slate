@@ -471,17 +471,8 @@ curl "https://api.towngasvcc.com/vcc-openapi/subs/getSubsByCode?seq=SEQ&token=TO
 --------- | ------- | ------- | -------------- | -------
 seq | string | 32 | 消息序列号，前4位为接口编码1001，5～18位为时间戳，格式为yyyyMMddHHmmss，19～32位为消息流水号，00000000000001～99999999999999，达到最大值后可以循环使用。|Y
 token | string | 20 | 20位的接入令牌，由[1002会话密钥请求接口](#token)获取| Y
-type | string | | 媒体文件类型，分别有图片（image）、语音（voice）和缩略图（thumb）| Y
-media | string | |	是	form-data中媒体文件标识，有filename、filelength、content-type等信息 | Y
-
-<aside class="warning">
-注意点：<br/>
-1、临时素材media_id是可复用的。<br/>
-2、上传临时素材的格式、大小限制与公众平台官网一致。<br/>
-    图片（image）: 2M，支持PNG\JPEG\JPG\GIF格式<br/>
-    语音（voice）：2M，播放长度不超过60s，支持AMR\MP3格式<br/>
-    缩略图（thumb）：64KB，支持JPG格式<br/>
-</aside>
+subsCode | string | 20 | 气户唯一标示 | Y
+orgCode | string | 20 | 组织机构编码，参考[附录B](#orgCode) | Y
 
 ### 返回参数
 
@@ -489,17 +480,27 @@ media | string | |	是	form-data中媒体文件标识，有filename、filelength
 
 ```json
 {
-    "type": "TYPE",
-    "mediaId": "MEDIA_ID",
-    "createTime": 123456789
+    "subsCode": "123456",
+    "name": "张**",
+    "resType": "A",
+    "displayAddr": "木岭小区******",
+    "subsType": "1",
+    "state": "A",
+    "orgCode": "SU0105"
 }
 ```
 
 参数名称 | 类型 | 长度 | 描述 | 是否必须
 --------- | ------- | ------- | -------------- | -------
-type | string | |	媒体文件类型，分别有图片（image）、语音（voice）、视频（video）和缩略图（thumb，主要用于视频与音乐格式的缩略图）| Y
-mediaId | string | 32 | 媒体文件上传后，获取标识 | Y
-createTime | datetime |	媒体文件上传时间戳 格式为yyyyMMddhhmmss | Y
+subsCode | string | 20 | 气户户号 |Y
+name | string | 60 | 气户名称 | Y
+addrCode | string | 20 | 地址编码，参考[3001 地址信息增量同步](#area) | Y
+addrDetail | string | 60 | 地址明细 | Y
+subsType | char | 1 | 1:民用；2:商用 | Y
+state | char | 1 | 气户状态，参考[附录D](#subsState) | Y
+tel | string | 20 | 联系电话 | N
+phone | string | 20 | 手机号码 | N
+orgCode | string | 20 | 组织机构编码，参考[附录B](#orgCode) | Y
 
 ## 3006 绑定户号查询
 
@@ -619,222 +620,3 @@ B | 楼栋
 # E 表具类型
 <span id="resType"></span>
 
-# Introduction
-
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
-
-We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
-
-This example API documentation page was created with [Slate](https://github.com/tripit/slate). Feel free to edit it and use it as a base for your own API's documentation.
-
-# Authentication
-
-> To authorize, use this code:
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-```
-
-```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-```
-
-> Make sure to replace `meowmeowmeow` with your API key.
-
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
-
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`Authorization: meowmeowmeow`
-
-<aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
-</aside>
-
-# Kittens
-
-## Get All Kittens
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
-
-```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
-```
-
-> The above command returns JSON structured like this:
-
-```json
-[
-  {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
-  },
-  {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
-  }
-]
-```
-
-This endpoint retrieves all kittens.
-
-### HTTP Request
-
-`GET http://example.com/api/kittens`
-
-### Query Parameters
-
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
-
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-
-## Get a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
-```
-
-> The above command returns JSON structured like this:
-
-```json
-{
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
-}
-```
-
-This endpoint retrieves a specific kitten.
-
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
-
-### HTTP Request
-
-`GET http://example.com/kittens/<ID>`
-
-### URL Parameters
-
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to retrieve
-
-## Delete a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -X DELETE
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.delete(2);
-```
-
-> The above command returns JSON structured like this:
-
-```json
-{
-  "id": 2,
-  "deleted" : ":("
-}
-```
-
-This endpoint retrieves a specific kitten.
-
-### HTTP Request
-
-`DELETE http://example.com/kittens/<ID>`
-
-### URL Parameters
-
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to delete
